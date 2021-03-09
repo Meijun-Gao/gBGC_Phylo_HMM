@@ -1,0 +1,47 @@
+
+# Copyright 2017, 2018 Jack Smith, Wei Wang
+
+# This file is part of SERES.
+
+# SERES is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# SERES is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with SERES.  If not, see <https://www.gnu.org/licenses/>.
+
+def reversed(list):
+    size=len(list)
+    retlist=[0 for i in range(size)]
+    for i,entry in enumerate(list): 
+        retlist[size-1-i]=entry
+    return retlist
+
+def get_cmd_args():
+    import sys
+    argDict = {}
+    skipNext = False
+    for i,arg in enumerate(sys.argv):
+        if not skipNext:
+            if '-' in arg:
+                # a new argument
+                skipNext = True
+                if not i==len(sys.argv)-1:
+                    if not '-' in sys.argv[i+1]:
+                        argDict[arg.replace('-','')] = sys.argv[i+1]
+                    else:
+                        skipNext = False
+                        argDict[arg.replace('-','')] = arg.replace('-','')
+                else:
+                    argDict[arg.replace('-','')] = arg.replace('-','')
+        else:
+            skipNext = False
+            continue
+    return argDict
+

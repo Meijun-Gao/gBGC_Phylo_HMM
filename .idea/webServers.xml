@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2da7c439-aa26-475e-86f4-c4e4857b8856" name="gBGC" url="http:///">
+        <fileTransfer accessType="SFTP" host="hpcc.msu.edu" port="22" sshConfigId="80a6f03e-f9cb-4608-8391-9c9077cfdce6" sshConfig="gaomeiju@hpcc.msu.edu:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
