@@ -30,6 +30,8 @@ To get the posterior decoding results of all states and estimated parameters, ru
 ```
 python run_HMM.py alignmentFile.fasta all-genetrees.txt 
 Options:
+    alignmentFile.fasta: the input genome sequences file
+    all-genetrees.txt: all different unrooted topology trees
     -h show the basic usage of the algorithm
     -t INT number of independent trials to run;  default value=10
     --sh_ac sh activate; default value=1
@@ -40,7 +42,8 @@ Options:
     --SNP if use the SNP sequences of the input sequences; default value=0
         0 use all site;  1 only use SNP
 ```
-The `\RAXML` directory is the complied RAxML files, which can be downloaded from the [^1]
+The `\RAXML` directory is the complied RAxML files, which can be downloaded from the [^1]. We use its estimation of substitution
+model parameters and branch lengths of input local genealogy trees as starting points for learning.
 
 [^1]: https://cme.h-its.org/exelixis/web/software/raxml/
 ## Output file explanations
@@ -57,12 +60,13 @@ the ratio of transition and transversion substitutions.
 + Transition parameters: the parameters for the transition matrix in the paper, (sb, sh, $\gamma$)
 + hscale parameters: the scaling coefficient for hotspot genealogy tree branch lengths, $\beta$
 + Trees: list all gene trees corresponding to each state
-+ logarithmic posterior probability of each state in each site of the input sequences
++ Posterior probability of each state in each site of the input sequences
     - format: Position, Posteriors1, Posteriors2, Posteriors3, ..., Posteriors(2K)
 
 
 ## Simulation and empirical data explanations
-We use msHOT and seq-gen to generate simulation data. You can use `generate_data.py` to generate simulation data.
+We use msHOT and seq-gen to generate simulation data. You can use `generate_data.py` to generate simulation data. In the
+`\data\simulation\`, it includes all simulation data in our paper.
 + 4 taxa 
 
     Sequence length=5k; background recombination rate=5; background mutation rate=1.
