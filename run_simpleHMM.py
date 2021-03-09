@@ -1,46 +1,44 @@
-import sys, getopt
 import ete3
+import sys, getopt
 import numpy as np
-from src.my_tree import *
+from src.my_tree import tree2newick
 import sys
 import re
 import os
 import time
-from src.myFun import *
 import multiprocessing as mp
-from src.training import *
+from src.myFun import *
+from old_HMM_src.old_optimization import *
+from old_HMM_src.old_training import *
 
 
 def main(argv):
     usage = '''
     General Usage:
-    ./run_HMM.py alignmentFile.fasta all-genetrees.txt
+    ./run_oldHMM.py alignmentFile.fasta all-genetrees.txt
     Options:
     -h show the basic usage of the algorithm
     -t INT number of independent trials to run
-    --sh_ac sh activate; 1: background and hotspot use different substitution model parameters
     --modelname HKY or GTR; default HKY
     --prefix PATH, where to put output files
     --SNP 0 use all site;  1 only use SNP
     '''
     """ default setting """
     begin_time = time.time()
-    subs_h = None
     subs_b = None
-    tree_height = None
+    input_tree_set = None
     SNP = 0
     path = ''
     t = 10
     model_name = 'HKY'
-    sh_ac = 1
 
     if len(argv) <= 2:
         print(usage)
         sys.exit()
     try:
-        opts, args = getopt.getopt(argv[3:], "-h-t:", ["modelname=", "sh_ac=", "prefix=", "SNP="])
+        opts, args = getopt.getopt(argv[3:], "-h-t:", ["modelname=", "prefix=", "SNP="])
     except getopt.GetoptError:
-        print('run_HMM.py alignmentFile.fasta all-genetrees_topo.txt')
+        print('run_oldHMM.py alignmentFile.fasta all-genetrees_topo.txt')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
@@ -50,8 +48,6 @@ def main(argv):
             t = int(arg)
         elif opt in "--modelname":
             model_name = arg
-        elif opt == "--sh_ac":
-            sh_ac = int(arg)
         elif opt == "--SNP":
             SNP = int(arg)
         elif opt == "--prefix":
@@ -70,6 +66,7 @@ def main(argv):
         current_path = sys.argv[1][:-15]
         obs_path = os.getcwd()
         full_path = obs_path + '/' + current_path
+
         """ generate tree via RAXML"""
         for i in range(len(tree_set)):
             with open(current_path + '/temp_tree', "w+") as f:
@@ -80,9 +77,9 @@ def main(argv):
             elif model_name == 'HKY':
                 os.system('''./RAXML/raxmlHPC-AVX -p 12345 -m GTRCAT --HKY -V -f e -s %s -t %s -w %s -n infer%s''' % (
                     sys.argv[1], current_path + '/temp_tree', full_path, str(i)))
-
             else:
-                print('null')
+                print('null model')
+
             tree_set_i = open(full_path + '/RAxML_result.infer' + str(i), 'r').readlines()
             t1 = ete3.Tree(tree_set_i[0])
             R = t1.get_midpoint_outgroup()  # and set it as tree outgroup
@@ -118,7 +115,6 @@ def main(argv):
         else:
             print('null')
         subs_b = temp2 + temp1
-        subs_h = subs_b
         input_tree_set = new_tree_set
         os.system('''rm %s/RAxML*''' % full_path)
         os.system('''rm %s/temp_*''' % full_path)
@@ -147,36 +143,25 @@ def main(argv):
     seq_problist = []
     postlist = []
     forestlist = []
-    param_blist = []  # subs_param
-    param_hlist = []  # subs_param
-    trans_param_list = []  # three parameters for hotspot
+    paramlist = []  # subs_param
     transitlist = []  # transition matrix
-    hscale_list = []
-    branch_list = []
+    sb_list = []
 
     N = len(alignment[:, 1])
-    learnk = 0
     if model_name == 'GTR':
-        if sh_ac == 0:
-            learnk = 13 + k * (2 * N - 2) + 1
-        else:
-            learnk = 23 + k * (2 * N - 2) + 1
-    elif model_name == 'HKY':
-        if sh_ac == 0:
-            learnk = 3 + 5 + k * (2 * N - 2) + 1
-        else:
-            learnk = 3 + 5 + 5 + k * (2 * N - 2) + 1
-    else:
-        print('null')
+        learnk = 1 + 10 + k * (2 * N - 2)
+    else:  # HKY
+        learnk = 1 + 5 + k * (2 * N - 2)
 
     """ use multiple processing """
     num_cores = t
     list_idx = list(range(t))
     pool = mp.Pool(num_cores)
     results = [pool.apply_async(Baum_Welch, args=(i, alignment, input_tree_set, learnk, subs_b,
-                                                  subs_h, sh_ac, tree_height, k, model_name, path)) for i in list_idx]
+                                                  k, model_name, path)) for i in list_idx]
     results = [p.get() for p in results]
-
+    # elements in one result
+    # begin_seq_prob, seq_prob, transitions, emissions, forest, posteriors, final_subs_param
     for i in range(t):
         begin_seq_prob = results[i][0]
         seq_prob = results[i][1]
@@ -184,20 +169,16 @@ def main(argv):
         emissions = results[i][3]
         forest = results[i][4]
         posteriors = results[i][5]
-        final_subs_param_b = results[i][6]
-        final_subs_param_h = results[i][7]
-        trans_param = results[i][8]  # transition matrix param, s_b, s_h, gamma
-        final_hscale = results[i][9]
+        final_subs_param = results[i][6]
+        temp_sb = results[i][7]
 
         forestlist.append(forest)
         begin_seq_problist.append(begin_seq_prob)
         seq_problist.append(seq_prob)
         postlist.append(posteriors.tolist())
-        param_blist.append(final_subs_param_b)  # subs_param
-        param_hlist.append(final_subs_param_h)  # subs_param
-        trans_param_list.append(trans_param)
+        paramlist.append(final_subs_param)  # subs_param
         transitlist.append(transitions.tolist())
-        hscale_list.append(final_hscale)
+        sb_list.append(temp_sb)
 
     end = time.time()
     total_time = (end - begin_time) / 3600
@@ -206,20 +187,16 @@ def main(argv):
     best_prob = seq_problist[max_idx]
     best_posterior = np.array(postlist[max_idx])
     best_forest = forestlist[max_idx]
-    best_param_b = param_blist[max_idx]
-    best_param_h = param_hlist[max_idx]
-    best_trans_param = trans_param_list[max_idx]
-    best_transit = transitlist[max_idx]
-    best_hscale = hscale_list[max_idx]
-    # best_branch = branch_list[max_idx]
-    # Print out all the info
+    best_param = paramlist[max_idx]
+    # best_transit = transitlist[max_idx]
+    best_sb = sb_list[max_idx]
+    # Print out all the trees
     result = 'Optimize time:' + str(total_time) + '\n'
     result += 'Begin Prob:' + str(best_begin_prob) + '\n'
     result += 'End Prob:' + str(best_prob) + '\n'
-    result += 'Substitution parameters back:' + str(best_param_b) + '\n'
-    result += 'Substitution parameters hot:' + str(best_param_h) + '\n'
-    result += 'Transition parameters:' + str(best_trans_param) + '\n'
-    result += 'hscale parameters:' + str(best_hscale) + '\n'
+    # result += 'Transitions:' + str(best_transit) + '\n'
+    result += 'Substitution parameters:' + str(best_param) + '\n'
+    result += 'Best sb:' + str(best_sb) + '\n'
     result += "Trees:\n"
     for elem in best_forest:
         speciesList = [name.split()[0] for name in aligndict.keys()]

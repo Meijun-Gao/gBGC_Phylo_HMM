@@ -24,7 +24,7 @@ python == 3.7
 
 Set up the conda env: conda env create -f hmm_env.yml
 
-## Run the model
+## Run the new Phylo-HMM model based algorithm
 
 To get the posterior decoding results of all states and estimated parameters, run:
 ```
@@ -46,9 +46,27 @@ The `\RAXML` directory is the complied RAxML files, which can be downloaded from
 model parameters and branch lengths of input local genealogy trees as starting points for learning.
 
 [^1]: https://cme.h-its.org/exelixis/web/software/raxml/
+
+## Run the simple Phylo-HMM model based algorithm
+The simple Phylo-HMM model based algorithm can be run by:
+```
+python run_simpleHMM.py alignmentFile.fasta all-genetrees.txt 
+Options:
+    alignmentFile.fasta: the input genome sequences file
+    all-genetrees.txt: all different unrooted topology trees
+    -h show the basic usage of the algorithm
+    -t INT number of independent trials to run;  default value=10
+    --modelname substitutiom model name; HKY or GTR;  default value='HKY'
+    --prefix PATH, where to put output files
+    --SNP if use the SNP sequences of the input sequences; default value=0
+        0 use all site;  1 only use SNP
+```
+Compared with the new Phylo-HMM model, there is only one substitution model and none hotspot states.
+
 ## Output file explanations
 
-The output file of the algorithm includes:
+The output file of the new Phylo-HMM model based algorithm includes:
+
 + Optimize time: xxx hours
 + Begin Prob: the log-likelihood value at the beginning of the learning process
 + End Prob: the log-likelihood value after all learning process
@@ -64,21 +82,23 @@ the ratio of transition and transversion substitutions.
     - format: Position, Posteriors1, Posteriors2, Posteriors3, ..., Posteriors(2K)
 
 
+The output file of the simple Phylo-HMM model based algorithm includes:
++ Optimize time: xxx hours
++ Begin Prob: the log-likelihood value at the beginning of the learning process
++ End Prob: the log-likelihood value after all learning process
++ Substitution parameters: the substitution model parameters for background regions in genome sequences.
+    - format: (f_A, f_C, f_G, f_T, ts/tv), the first four parameters represent the base frequencies of A, C, G, and T, ts/tv represents
+the ratio of transition and transversion substitutions.
++ Trees: list all gene trees corresponding to each state
++ Posterior probability of each state in each site of the input sequences
+    - format: Position, Posteriors1, Posteriors2, Posteriors3, ..., Posteriors(2K)
+
+
+
+
 ## Simulation and empirical data explanations
-We use msHOT and seq-gen to generate simulation data. You can use `generate_data.py` to generate simulation data. In the
-`\data\simulation\`, it includes all simulation data in our paper.
-+ 4 taxa 
-
-    Sequence length=5k; background recombination rate=5; background mutation rate=1.
-    - one recombination hotspot, recombinaiton rate multiple=10, mutation multiple=10; `data\simulation_data\h1_r10m10`
-    - two recombination hotspots, recombinaiton rate multiple=10, mutation multiple=10; `data\simulation_data\h2_r10m10`
-    - none recombination hotspot, negative control; use background recombination rate and mutation rate. `data\simulation_data\h0`
-+ 5 taxa
-
-    Sequence length=2k; background recombination rate=2; background mutation rate=1.
-    - one recombination hotspot, recombinaiton rate multiple=10, mutation multiple=10; `data\simulation_data\h1_r10m10`
-    - two recombination hotspots, recombinaiton rate multiple=10, mutation multiple=10; `data\simulation_data\h2_r10m10`
-    - none recombination hotspot, negative control; use background recombination rate and mutation rate.  `data\simulation_data\h0`
+We use msHOT and seq-gen to generate simulation data. You can use `generate_data.py` to generate simulation data. 
+Directory `\data\simulation\` includes all simulation data in our paper, you can see the details in the `\data\README.md`.
 
 The usage of `generate_data.py`:
 ```
