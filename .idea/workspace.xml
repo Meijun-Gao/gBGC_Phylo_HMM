@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ffae3a00-a640-4560-b8f7-31128323c4b2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LTR_pvalue.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-13result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-14result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-15result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-16result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-17result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-18result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-1result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-2result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-3result.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/simulation/taxa4/h0/new/old/new-4result.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="ffae3a00-a640-4560-b8f7-31128323c4b2" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -198,7 +185,7 @@
       <workItem from="1612556675718" duration="89598000" />
       <workItem from="1614290078848" duration="3369000" />
       <workItem from="1614885413598" duration="55763000" />
-      <workItem from="1615408297640" duration="14617000" />
+      <workItem from="1615408297640" duration="15078000" />
     </task>
     <servers />
   </component>
