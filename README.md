@@ -94,8 +94,6 @@ the ratio of transition and transversion substitutions.
     - format: Position, Posteriors1, Posteriors2, Posteriors3, ..., Posteriors(2K)
 
 
-
-
 ## Simulation and empirical data explanations
 We use msHOT and seq-gen to generate simulation data. You can use `generate_data.py` to generate simulation data. 
 Directory `\data\simulation\` includes all simulation data in our paper, you can directly use them.
@@ -140,6 +138,22 @@ use the SNP sequences (`\empirical\SNPseq\`) as the input, although the code can
 
 [^4]: http://plants.ensembl.org/index.html
 [^5]: https://mafft.cbrc.jp/alignment/software/
+
+## Evaluate learning performance
+You can run the `evaluate_performance.py` to evaluate the learning performance, including getting the p-value of LRT test of
+the two HMM models, and the average classification accuracy of the new Phylo-HMM model. 
+```
+General Usage:
+python evaluate_performance.py 
+arguments:
+-h show the basic usage of the algorithm
+--numtaxa 4 or 5, the number of taxa
+--hotspot_num 0 or 1 or 2
+--threshold 0.95, non-conservative classification threshold; 0.75, conservative classification threshold 
+--newpath PATH, the directory for the results of new Phylo-HMM model based algorithm
+--newpath PATH, the directory for the results of simple Phylo-HMM model based algorithm
+```
+
 ## Citation
 
 If using this code, please cite our paper.
