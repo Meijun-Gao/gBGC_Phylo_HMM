@@ -98,7 +98,8 @@ the ratio of transition and transversion substitutions.
 
 ## Simulation and empirical data explanations
 We use msHOT and seq-gen to generate simulation data. You can use `generate_data.py` to generate simulation data. 
-Directory `\data\simulation\` includes all simulation data in our paper, you can see the details in the `\data\README.md`.
+Directory `\data\simulation\` includes all simulation data in our paper, you can directly use them.
+More details can be seen in the `\data\README.md`.
 
 The usage of `generate_data.py`:
 ```
@@ -106,10 +107,10 @@ python generate_hotspot.py --numtaxa=4 --modelname='HKY' --hotspot_num=1
     --rr_multiple=10 --mr_multiple=10 --path=''
 Options:
 -h show the basic usage for simulation data generation
---numtaxa 4 or 5;   the length of the sequences are 5000, 2000 for 4 and 5 taxa, respectively
+--numtaxa 4 or 5;   we set the length of the sequences to 5000, 2000 for 4 and 5 taxa, respectively
 --modelname HKY or GTR; default HKY
 --hotspot_num 0 or 1 or 2
-    when hotspot_num=0, --rr_multiple --mr_multiple do not need  
+    when hotspot_num=0, --rr_multiple --mr_multiple do not need, it is a negative control group 
 --hot_rho recombination rate (rr) multiple based on the rr in background
 --hot_dScale mutation rate (mr) multiple based on the mr in background
 --path PATH, where to put output files
@@ -121,6 +122,11 @@ The previous two files can be downloaded in Hudson Lab Home Page[^2], `seq-gen` 
 `myFun.py` is accessorial file. As for `\tree_files`, it includes all unrooted phylogenetic trees for two different
 number of taxa (`\tree_files\taxa4_dif_topo.txt`, `\tree_files\taxa4_dif_topo.txt`) and random model trees to 
 simulate the phylogenetic histories for simulation data (`\tree_files\taxa4_modeltree.txt`, `\tree_files\taxa5_modeltree.txt`).
+
+For this simulation code, we pre-set the locations of the hotspots, but they can be modified in the code easily. For 4
+taxa, one hotspot is located from 2000 to 4000, and two hotspots are located from 1000 to 3000 and 4000 to 4500, respectively.
+For 5 taxa, one hotspot is located from 500 to 1300, and two hotspots are located from 500 to 1200 and 1500 to 1800, respectively.
+
 
 [^2]: http://home.uchicago.edu/~rhudson1/
 [^3]: https://snoweye.github.io/phyclust/document/Seq-Gen.v.1.3.2/Seq-Gen.Manual.html
