@@ -151,7 +151,7 @@ arguments:
 --hotspot_num 0 or 1 or 2
 --threshold 0.95, non-conservative classification threshold; 0.75, conservative classification threshold 
 --newpath PATH, the directory for the results of new Phylo-HMM model based algorithm
---newpath PATH, the directory for the results of simple Phylo-HMM model based algorithm
+--simplepath PATH, the directory for the results of simple Phylo-HMM model based algorithm
 ```
 
 ## Citation
