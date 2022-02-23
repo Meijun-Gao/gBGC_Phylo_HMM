@@ -1,12 +1,12 @@
 # Title of the paper
 
-This is an authors' implementation of "Title of the paper" in Python.
+This is an authors' implementation of "Statistical analysis of GC-biased gene conversion and recombination hotspots in eukaryotic genomes: a phylogenetic hidden Markov model-based approach" in Python.
 
 Authors: Meijun Gao, Kevin J. Liu
 
-Paper: https://
+Paper: https://dl.acm.org/doi/10.1145/3459930.3469509
 
-Accepted by 
+Accepted by ACM BCB 2021: Proceedings of the 12th ACM Conference on Bioinformatics, Computational Biology, and Health Informatics
 
 ## Introduction
 
@@ -158,6 +158,6 @@ arguments:
 
 If using this code, please cite our paper.
 ```
+Gao M, Liu K J. Statistical analysis of GC-biased gene conversion and recombination hotspots in eukaryotic genomes: a phylogenetic hidden Markov model-based approach[C]//Proceedings of the 12th ACM Conference on Bioinformatics, Computational Biology, and Health Informatics. 2021: 1-24.
+``` 
 
-```# gBGC_Phylo_HMM
-# gBGC_Phylo_HMM
